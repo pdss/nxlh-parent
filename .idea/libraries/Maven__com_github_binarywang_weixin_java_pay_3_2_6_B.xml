@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.binarywang:weixin-java-pay:3.2.6.B">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/binarywang/weixin-java-pay/3.2.6.B/weixin-java-pay-3.2.6.B.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/binarywang/weixin-java-pay/3.2.6.B/weixin-java-pay-3.2.6.B-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/binarywang/weixin-java-pay/3.2.6.B/weixin-java-pay-3.2.6.B-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

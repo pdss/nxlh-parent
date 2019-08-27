@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbSmsMapper">
+  <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbSms">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
+    <result column="isdelete" jdbcType="INTEGER" property="isdelete" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="message" jdbcType="VARCHAR" property="message" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="wxuserid" jdbcType="VARCHAR" property="wxuserid" />
+  </resultMap>
+</mapper>

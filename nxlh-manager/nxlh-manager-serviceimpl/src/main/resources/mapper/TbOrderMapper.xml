@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbOrderMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbOrder">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="orderno" jdbcType="VARCHAR" property="orderno"/>
+        <result column="thirdorderno" jdbcType="VARCHAR" property="thirdorderno"/>
+        <result column="orderprice" jdbcType="DECIMAL" property="orderprice"/>
+        <result column="payprice" jdbcType="DECIMAL" property="payprice"/>
+        <result column="wxuserid" jdbcType="VARCHAR" property="wxuserid"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="paytime" jdbcType="TIMESTAMP" property="paytime"/>
+        <result column="wxopenid" jdbcType="VARCHAR" property="wxopenid"/>
+        <result column="banktype" jdbcType="VARCHAR" property="banktype"/>
+        <result column="cheap" jdbcType="DECIMAL" property="cheap"/>
+        <result column="couponid" jdbcType="VARCHAR" property="couponid"/>
+        <result column="refund" jdbcType="INTEGER" property="refund"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="deliverytime" jdbcType="TIMESTAMP" property="deliverytime"/>
+        <result column="receiveaddress" jdbcType="VARCHAR" property="receiveaddress"/>
+        <result column="receivername" jdbcType="VARCHAR" property="receivername"/>
+        <result column="receiverphone" jdbcType="VARCHAR" property="receiverphone"/>
+        <result column="receiveprovince" jdbcType="VARCHAR" property="receiveprovince"/>
+        <result column="receivecity" jdbcType="VARCHAR" property="receivecity"/>
+        <result column="receivearea" jdbcType="VARCHAR" property="receivearea"/>
+        <result column="receivephoneprefix" jdbcType="VARCHAR" property="receivephoneprefix"/>
+        <result column="confirmtime" jdbcType="TIMESTAMP" property="confirmtime"/>
+        <result column="confirmtype" jdbcType="INTEGER" property="confirmtype"/>
+        <result column="score" jdbcType="DECIMAL" property="score"/>
+        <result column="expressprice" jdbcType="DECIMAL" property="expressprice"/>
+        <result column="ordertype" jdbcType="INTEGER" property="ordertype"/>
+        <result column="istransited" jdbcType="INTEGER" property="istransited"/>
+        <result column="coupontype" jdbcType="INTEGER" property="coupontype"/>
+        <result column="exchangescore" jdbcType="DECIMAL" property="exchangescore"/>
+        <result column="payscore" jdbcType="DECIMAL" property="payscore"/>
+        <result column="express" jdbcType="INTEGER" property="express"/>
+        <result column="closetime" jdbcType="TIMESTAMP" property="closetime"/>
+        <result column="nowprice" jdbcType="DECIMAL" property="nowprice"/>
+        <result column="rentpricebyday" jdbcType="DECIMAL" property="rentpricebyday"/>
+        <result column="rentterm" jdbcType="INTEGER" property="rentterm"/>
+        <result column="rentdays" jdbcType="INTEGER" property="rentdays"/>
+    </resultMap>
+
+    <resultMap id="OrderItemBaseMap" type="com.nxlh.manager.model.dto.OrderItemDTO">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="orderid" jdbcType="VARCHAR" property="orderid"/>
+        <result column="orderno" jdbcType="VARCHAR" property="orderno"/>
+        <result column="productid" jdbcType="VARCHAR" property="productid"/>
+        <result column="buycount" jdbcType="INTEGER" property="buycount"/>
+        <result column="productprice" jdbcType="DECIMAL" property="productprice"/>
+        <result column="productname" jdbcType="VARCHAR" property="productname"/>
+        <result column="tracknumber" jdbcType="VARCHAR" property="tracknumber"/>
+        <result column="express" jdbcType="INTEGER" property="express"/>
+        <result column="deliverytime" jdbcType="TIMESTAMP" property="deliverytime"/>
+        <result column="confirmtime" jdbcType="TIMESTAMP" property="confirmtime"/>
+        <result column="confirmtype" jdbcType="INTEGER" property="confirmtype"/>
+        <result column="istransited" jdbcType="INTEGER" property="istransited"/>
+        <result column="productimage" jdbcType="VARCHAR" property="productimage"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="thirdorderno" jdbcType="INTEGER" property="thirdorderno"/>
+        <result column="wxuserid" jdbcType="VARCHAR" property="wxuserid"/>
+        <result column="sumprice" jdbcType="DECIMAL" property="sumprice"/>
+        <result column="exchangescore" jdbcType="DECIMAL" property="exchangescore"/>
+    </resultMap>
+
+
+    <resultMap id="OrderAndWx" type="com.nxlh.manager.model.dto.OrderDTO" extends="BaseResultMap">
+        <collection property="wxuser" ofType="com.nxlh.manager.model.dto.WxUserDTO"
+                    select="getWxuerByid" column="wxuserid">
+        </collection>
+    </resultMap>
+
+    <!--是否连续三个月内都有订单-->
+
+
+    <!--是否连续三个月内都有订单-->
+
+    <select id="hasFewMonthOrder" resultType="java.lang.Long">
+        select IFNULL( sum(a.count),0) as 'count'
+        from (
+        <foreach collection="dates" item="item" separator="union" index="key">
+            <![CDATA[
+                 select 1 as count
+                 from tb_order
+                 where wxuserid=#{wxuserid} and `status`=4 and refund=0 and addtime < #{item} and addtime >= #{key}
+              ]]>
+        </foreach>
+        )a
+    </select>
+
+
+    <!--微信用户信息-->
+    <select id="getWxuerByid" resultType="com.nxlh.manager.model.dto.WxUserDTO">
+        SELECT *
+        from tb_wxuser
+        where tb_wxuser.isdelete = 0
+          and tb_wxuser.id = #{wxuserid}
+    </select>
+
+    <!--各状态的订单数量-->
+    <select id="getCountGroupByOrderStatus" resultType="java.util.Map">
+
+        select cast(a.status as SIGNED) as 'status',cast(a.count as SIGNED) as 'count'
+        from (select status,count(id) as 'count' from tb_order where wxuserid = #{id} group by status) a
+    </select>
+
+
+    <!--订单详情-->
+    <resultMap id="DetailOrderMap" type="com.nxlh.manager.model.dbo.TbOrder" extends="BaseResultMap">
+
+        <!--微信用户-->
+        <association property="wxuser" javaType="com.nxlh.manager.model.dto.WxUserDTO" column="wxuserid"
+                     select="getWxUserById">
+        </association>
+        <!--优惠券-->
+        <association property="coupon" javaType="com.nxlh.manager.model.dbo.TbCoupons" column="couponid"
+                     select="getUserCouponById"></association>
+
+        <!--对应的商品-->
+        <collection property="orderItems" ofType="com.nxlh.manager.model.dto.OrderItemDTO" column="id"
+                    select="getOrderItemsByOId">
+        </collection>
+
+        <collection property="refundItems" ofType="com.nxlh.manager.model.dbo.TbOrderRefund"
+                    select="getRefundItemsByOId" column="id">
+        </collection>
+    </resultMap>
+
+    <!--退款记录-->
+    <resultMap id="RefundOrderMap" type="com.nxlh.manager.model.dbo.TbOrder" extends="DetailOrderMap">
+        <collection property="refundItems" ofType="com.nxlh.manager.model.dbo.TbOrderRefund"
+                    select="getRefundItemsByOId" column="id">
+        </collection>
+    </resultMap>
+
+
+    <!--订单项的详情-->
+    <resultMap id="OrderItemDetailsMap" type="com.nxlh.manager.model.dto.OrderItemDTO" extends="OrderItemBaseMap">
+        <association property="product" javaType="com.nxlh.manager.model.dbo.TbShop" select="getShopById"
+                     column="productid"/>
+    </resultMap>
+
+
+    <!--订单列表+关联商品-->
+    <resultMap id="OrderMinMap" type="com.nxlh.manager.model.dbo.TbOrder" extends="BaseResultMap">
+
+        <!--对应的商品-->
+        <collection property="orderItems" ofType="com.nxlh.manager.model.dto.OrderItemDTO" column="id"
+                    select="getOrderItemsByOId">
+        </collection>
+    </resultMap>
+
+
+    <!--用户优惠券关联+券详情-->
+    <resultMap id="UserCouponByIdMap" type="com.nxlh.manager.model.dto.UserCouponDTO">
+        <association property="couponInfo" javaType="com.nxlh.manager.model.dbo.TbCoupons" select="getCouponById"
+                     column="couponid"/>
+    </resultMap>
+
+    <select id="getUserCouponById" resultType="com.nxlh.manager.model.dbo.TbCoupons">
+        select tb_coupons.*
+        from tb_user_coupon,
+             tb_coupons
+        where tb_user_coupon.id = #{id}
+          and tb_user_coupon.couponid = tb_coupons.id
+    </select>
+
+
+    <!--获取指定状态的用户订单列表-->
+    <select id="getUserOrdersByStatus" resultMap="OrderMinMap">
+        select * from tb_order where wxuserid=#{wxuserid}
+        <if test="status!=null">
+            and `status` in
+            <foreach collection="status" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
+        order by #{orderby}
+
+    </select>
+
+
+    <!--获取订单中关联的商品-->
+    <select id="getOrderItemsByOId" resultMap="OrderItemDetailsMap">
+        select *
+        from tb_order_item
+        where orderid = #{id}
+    </select>
+
+    <!--根据id获取商品信息-->
+    <select id="getShopById" resultType="com.nxlh.manager.model.dbo.TbShop">
+        select *
+        from tb_shop
+        where id = #{id}
+    </select>
+
+    <!--根据id获取微信用户-->
+    <select id="getWxUserById" resultType="com.nxlh.manager.model.dto.WxUserDTO">
+        select *
+        from tb_wxuser
+        where id = #{id}
+    </select>
+
+    <!--根据id获取优惠券-->
+    <select id="getCouponById" resultType="com.nxlh.manager.model.dbo.TbCoupons">
+        select *
+        from tb_coupons
+        where id = #{id}
+    </select>
+
+    <!--根据订单id获取退款记录-->
+    <select id="getRefundItemsByOId" resultType="com.nxlh.manager.model.dbo.TbOrderRefund">
+        select *
+        from tb_order_refund
+        where isdelete = 0
+          and orderid = #{id}
+    </select>
+
+    <!--订单详情-->
+    <select id="getDetails" parameterType="String" resultMap="DetailOrderMap">
+        select *
+        from tb_order
+        where id = #{id}
+    </select>
+    <!--根据日期查找所有订单详情（包括退款项）-->
+    <select id="getAllDetails" parameterType="String" resultMap="DetailOrderMap">
+        select *
+        from tb_order
+        where tb_order.addtime BETWEEN #{startDate} AND #{endDate}
+        order by addtime desc
+    </select>
+
+    <!--所有订单详情（包括退款项）-->
+    <select id="getAllDetailOrders" parameterType="String" resultMap="DetailOrderMap">
+        select *
+        from tb_order
+        order by addtime desc
+    </select>
+
+    <!--待退款的订单-->
+    <select id="getWaitRefundOrders" parameterType="String" resultMap="DetailOrderMap">
+        select o.*
+        from tb_order o,
+             tb_order_refund r
+        where o.id = r.orderid
+          and r.status = 0
+          and r.isdelete = 0
+        order by r.addtime asc
+    </select>
+
+
+    <!--获取指定时间段内的消费金额-->
+    <select id="getSumPriceInTime" resultType="java.math.BigDecimal">
+        <![CDATA[
+
+
+
+                                select ifnull(p1.p - p2.p, 0)
+                                from
+                                    (select sum(payprice) as p
+                                     from tb_order
+                                     where wxuserid = #{wxuserid}
+                                       and paytime <= #{endtime}
+                                       and paytime >= #{starttime}) p1,
+                                    (select sum(refundprice) as p
+                                     from tb_order_refund
+                                     where wxuserid = #{wxuserid}
+                                       and `status` = 1
+                                       and addtime <= #{endtime}
+                                       and addtime >= #{starttime}) p2
+
+
+
+        ]]>
+    </select>
+
+    <!--获取订单的购买商品总数-->
+    <select id="getOrderSumProductCount" parameterType="String" resultType="java.lang.Integer">
+        select sum(buycount)
+        from tb_order_item
+        where orderid = #{id}
+    </select>
+
+
+    <!--根据条件查询退款订单-->
+    <select id="queryByRefundType" resultMap="OrderAndWx">
+        select o.*,(SELECT count(tb_order_refund.id) FROM tb_order_refund WHERE tb_order_refund.orderid=o.id AND
+        tb_order_refund.`status`=0 )as "refundcount"
+        from tb_order o,tb_wxuser w
+        where exists (select * from tb_order_refund f where f.orderid = o.id and f.`status` = 0)
+        AND o.wxuserid=w.id
+        <if test="filter != null">
+            AND (
+            o.orderno LIKE #{filter} OR
+            o.thirdorderno LIKE #{filter} OR
+            o.receivername LIKE #{filter} OR
+            o.receiveaddress LIKE #{filter} OR
+            o.receiverphone LIKE #{filter} OR
+            w.nickname LIKE #{filter}
+            <if test="ordertype != null">
+                OR o.ordertype = #{ordertype}
+            </if>
+            )
+        </if>
+        order by o.addtime DESC
+    </select>
+
+
+    <!--根据条件查询-->
+    <select id="queryByFilter" resultMap="OrderAndWx">
+        SELECT o.*,(SELECT count(tb_order_refund.id) FROM tb_order_refund WHERE tb_order_refund.orderid=o.id AND
+        tb_order_refund.`status`=0 )as "refundcount"
+        FROM tb_order o,tb_wxuser w
+        WHERE
+        o.isdelete=0 AND o.wxuserid=w.id
+        <if test="type != null">AND(o.status = #{type}
+            <if test="type==1">
+                OR (o.status=4 AND o.istransited=0 AND o.ordertype=5 AND o.refund!=2)
+            </if>
+            )
+        </if>
+        <if test="ordertype!=null">AND o.ordertype = #{ordertype}</if>
+        <if test="filter != null">
+            AND (
+            o.orderno LIKE #{filter} OR
+            o.thirdorderno LIKE #{filter} OR
+            o.receivername LIKE #{filter} OR
+            o.receiveaddress LIKE #{filter} OR
+            o.receiverphone LIKE #{filter} OR
+            w.nickname LIKE #{filter}
+            <if test="ordertype != null">
+                OR o.ordertype = #{ordertype}
+            </if>
+            )
+        </if>
+        order by o.addtime DESC
+    </select>
+
+    <update id="editOrderAndOrderitemStatus">
+        UPDATE tb_order,tb_order_item
+        SET tb_order
+            .
+            `status` =
+            #{status}
+            AND
+            tb_order
+            .
+            refund =
+            #{refund}
+            AND
+            tb_order_item
+            .
+            `status` =
+            #{status}
+        WHERE tb_order.id=#{id} OR tb_order_item.orderid=#{id}
+
+    </update>
+
+
+    <!--    获取倒数三日需归还商品的订单-->
+    <select id="getRentRecordByEndDate" resultType="com.nxlh.manager.model.dto.OrderDTO">
+        SELECT tb_order.*,tb_wxuser_rentshop.enddate FROM tb_order,tb_wxuser_rentshop
+        WHERE tb_order.istransited=1 AND tb_order.ordertype=4 AND tb_order.status=3 AND tb_order.id=tb_wxuser_rentshop.orderid
+        AND tb_wxuser_rentshop.status=1 AND tb_wxuser_rentshop.enddate &lt; #{endDate} AND tb_wxuser_rentshop.enddate &gt; #{startDate}
+    </select>
+
+    <!--    获取逾期的租赁订单-->
+<!--    <select id="getRentOverdue" resultType="com.nxlh.manager.model.dto.OrderDTO">-->
+<!--        SELECT tb_order.*,tb_wxuser_rentshop.enddate FROM tb_order,tb_wxuser_rentshop-->
+<!--        WHERE tb_order.istransited=1 AND tb_order.ordertype=4 AND tb_order.status=3 AND tb_order.id=tb_wxuser_rentshop.orderid-->
+<!--        AND tb_wxuser_rentshop.status=1 AND tb_wxuser_rentshop.enddate &lt; #{date}-->
+<!--    </select>-->
+
+</mapper>

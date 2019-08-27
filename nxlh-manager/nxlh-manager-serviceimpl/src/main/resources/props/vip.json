@@ -1,0 +1,37 @@
+[
+  {
+    "level": 0,
+    "exp": 0,
+    "name": "用户",
+    "downgrade": 0,
+    "lower": -1
+  },
+  {
+    "level": 1,
+    "exp": 500,
+    "name": "铜牌",
+    "downgrade": 10,
+    "lower": 0
+  },
+  {
+    "level": 2,
+    "exp": 5000,
+    "name": "银牌",
+    "downgrade": 10,
+    "lower": 500
+  },
+  {
+    "level": 3,
+    "exp": 10000,
+    "name": "金牌",
+    "downgrade": 20,
+    "lower": 5000
+  },
+  {
+    "level":100,
+    "exp": 9999999999999,
+    "name": "钻石",
+    "downgrade": 0,
+    "lower": 0
+  }
+]

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbIndexmodulesMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbIndexmodules">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="thumbnail" jdbcType="VARCHAR" property="thumbnail"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="level" jdbcType="INTEGER" property="level"/>
+        <result column="subtitle" jdbcType="VARCHAR" property="subtitle"/>
+        <result column="color" jdbcType="VARCHAR" property="color" />
+    </resultMap>
+</mapper>

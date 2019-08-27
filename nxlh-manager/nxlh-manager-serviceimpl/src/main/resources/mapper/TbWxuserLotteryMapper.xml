@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbWxuserLotteryMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbWxuserLottery">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="wxuserid" jdbcType="VARCHAR" property="wxuserid"/>
+        <result column="lotteryid" jdbcType="VARCHAR" property="lotteryid"/>
+        <result column="shopid" jdbcType="VARCHAR" property="shopid"/>
+        <result column="activecode" jdbcType="VARCHAR" property="activecode"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="lotteryitemid" jdbcType="VARCHAR" property="lotteryitemid"/>
+    </resultMap>
+
+    <resultMap id="queryAllModel" type="com.nxlh.manager.model.dto.WxuserLotteryDTO" extends="BaseResultMap">
+        <collection property="wxuser" ofType="com.nxlh.manager.model.dto.WxUserDTO"
+                    select="getWxuerByid" column="wxuserid">
+        </collection>
+        <collection property="shop" ofType="com.nxlh.manager.model.dto.ShopDTO"
+                    select="getShopByid" column="shopid">
+        </collection>
+        <collection property="lottery" ofType="com.nxlh.manager.model.dto.LotteryDTO"
+                    select="getLotteryByid" column="lotteryid">
+        </collection>
+    </resultMap>
+
+
+    <!--根据活动id获取活动数据-->
+    <select id="queryAllByLotteryId" resultMap="queryAllModel">
+        SELECT *
+        FROM tb_wxuser_lottery
+        WHERE lotteryid = #{lotteryid}
+        ORDER BY addtime DESC
+    </select>
+
+    <!--微信用户信息-->
+    <select id="getWxuerByid" resultType="com.nxlh.manager.model.dto.WxUserDTO">
+        SELECT *
+        from tb_wxuser
+        where tb_wxuser.id = #{wxuserid}
+    </select>
+
+    <!--商品信息-->
+    <select id="getShopByid" resultType="com.nxlh.manager.model.dto.ShopDTO">
+        SELECT *
+        from tb_shop
+        where tb_shop.id = #{shopid}
+    </select>
+
+    <!--活动信息-->
+    <select id="getLotteryByid" resultType="com.nxlh.manager.model.dto.LotteryDTO">
+        SELECT *
+        from tb_lottery
+        where tb_lottery.id = #{lotteryid}
+    </select>
+
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbRoleAuthorizeMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbRoleAuthorize">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="roleid" jdbcType="VARCHAR" property="roleid"/>
+        <result column="authorizeid" jdbcType="VARCHAR" property="authorizeid"/>
+    </resultMap>
+
+    <insert id="insertRoleAuthorizes">
+        INSERT INTO tb_role_authorize(`id`,`addtime`,`isdelete`,`roleid`,`authorizeid`)
+        VALUES
+        <foreach collection="list" index="index" item="item" separator=",">
+            ( UUID(),now(),0,#{roleid},#{item})
+        </foreach>
+    </insert>
+
+</mapper>

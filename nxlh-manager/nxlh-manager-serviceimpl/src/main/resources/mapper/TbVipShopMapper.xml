@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbVipShopMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbVipShop">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="vipprice" jdbcType="DECIMAL" property="vipprice"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="stockcount" jdbcType="INTEGER" property="stockcount"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="shopid" jdbcType="VARCHAR" property="shopid"/>
+        <result column="activityid" jdbcType="VARCHAR" property="activityid"/>
+    </resultMap>
+
+    <resultMap id="VipShopPageModel" type="com.nxlh.manager.model.dto.VipShopDTO" extends="BaseResultMap">
+        <collection property="shop" ofType="com.nxlh.manager.model.dto.ShopDTO"
+                    select="getShopById" column="shopid">
+        </collection>
+        <collection property="seckill" ofType="com.nxlh.manager.model.dto.SeckillDTO"
+                    select="getSeckillById" column="activityid">
+        </collection>
+    </resultMap>
+
+    <select id="queryPage" resultMap="VipShopPageModel">
+        SELECT *
+        FROM tb_vip_shop
+        WHERE tb_vip_shop.isdelete!=1 AND tb_vip_shop.activityid=#{activityid}
+        ORDER BY sort,addtime
+    </select>
+
+    <select id="getShopById" resultType="com.nxlh.manager.model.dto.ShopDTO">
+        SELECT *
+        from tb_shop
+        where tb_shop.id = #{shopid}
+    </select>
+
+    <select id="getSeckillById" resultType="com.nxlh.manager.model.dto.SeckillDTO">
+        SELECT *
+        from tb_seckill
+        where tb_seckill.id = #{activityid}
+    </select>
+
+
+</mapper>

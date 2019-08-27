@@ -1,0 +1,15 @@
+
+logging:
+  level:
+    com.nxlh.manager.mapper: debug
+    org.mybatis: INFO
+
+mybatis:
+  type-aliases-package: com.nxlh.model.dbo
+  mapper-locations: classpath:mapper/*.xml
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql

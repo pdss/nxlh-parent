@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbAdminMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbAdmin">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="loginname" jdbcType="VARCHAR" property="loginname"/>
+        <result column="loginpassword" jdbcType="VARCHAR" property="loginpassword"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="roleid" jdbcType="VARCHAR" property="roleid"/>
+        <result column="rolename" jdbcType="VARCHAR" property="rolename"/>
+
+    </resultMap>
+
+    <update id="updateAdminRolename" parameterType="com.nxlh.manager.model.dbo.TbAdmin">
+      update tb_admin SET rolename = #{rolename}
+      where roleid=#{roleid}
+    </update>
+
+</mapper>

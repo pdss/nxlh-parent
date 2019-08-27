@@ -1,0 +1,90 @@
+logging:
+  level:
+    com.nxlh: debug
+    org.mybatis: INFO
+  config: classpath:logback.xml
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+spring:
+  profiles:
+    active: dev
+
+  datasource:
+    username: root
+    password: NJnxlh504
+    url: jdbc:mysql://rm-8vbpyy64gu1aed37kgo.mysql.zhangbei.rds.aliyuncs.com:3306/nxlh_db_prod
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+  redis:
+    timeout: 10000
+    # redis-single
+    host: 127.0.0.01
+    port: 6379
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: sa123
+    publisher-confirms: true
+    publisher-returns: true
+    listener:
+      simple:
+        acknowledge-mode: manual #手动应答
+        concurrency: 1
+        max-concurrency: 1
+        retry:
+          enabled: true
+  data:
+    solr:
+      host: http://39.98.173.123:8983/solr/ik_core
+
+
+dubbo:
+  application:
+    name: nxlh-manager_prod
+  registry:
+    address: zookeeper://127.0.0.1:2181
+  scan:
+    basePackages: com.nxlh.manager.serviceimpl
+  protocol:
+    port: 20880
+  provider:
+    timeout: 50000
+
+nxlh:
+  dev: false
+  salt: NXLH
+  oss-accesskeyid: LTAIR9AHFHts9Eov
+  oss-accesskeyseret: q6n6e86CLhPrioNNnOssB2tG9G2m5q
+
+  sms-accesskeyid: LTAIR9AHFHts9Eov
+  sms-accesssecret: q6n6e86CLhPrioNNnOssB2tG9G2m5q
+  userRedisExprie: 20
+  carRedisExpire: 10
+  editUserType: http://localhost:54055/api/web/user/editviptypebywx
+  checkVipIsInvalidation: http://localhost:54055/api/web/user/editbywx
+
+  webshopnotify: https://www.njnxlh.shop
+
+  wechat:
+    appId: wxc417dc720f2f0759
+    secret: 4ac1fbd9cce5ab525c14e80ab70c8592
+    token: 111
+    aesKey: 111
+    msgDataFormat: JSON
+
+    pay:
+      appId: wxc417dc720f2f0759
+      secret: 4ac1fbd9cce5ab525c14e80ab70c8592
+      mchId: 1502936171
+      mchKey: 25833201e2c5e6f5beae158d7da6fc90
+      subAppId:
+      subMchId:
+      keyPath: classpath:apiclient_cert.p12
+      notifyUrl: http://3s.dkys.org:21259/api/wx/order/paynotify
+      refundNotifyUrl: http://3s.dkys.org:21259/api/wx/order/refundnotify
+      secKillOrderNotifyUrl: http://3s.dkys.org:21259/api/wx/order/seckillnotify

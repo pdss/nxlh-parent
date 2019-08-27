@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbCouponShoptagsMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbCouponShoptags">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="couponid" jdbcType="VARCHAR" property="couponid"/>
+        <result column="tagid" jdbcType="VARCHAR" property="tagid"/>
+    </resultMap>
+
+    <insert id="insetCouponShoptagsList">
+        INSERT INTO
+        tb_coupon_shoptags(`id`,`addtime`,`isdelete`,`couponid`,`tagid`)
+        VALUES
+        <foreach collection="list" item="tag" separator=",">
+            (UUID(),now(),0,#{tag.couponid},#{tag.tagid})
+        </foreach>
+    </insert>
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbRecycleProductMapper">
+  <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbRecycleProduct">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
+    <result column="isdelete" jdbcType="INTEGER" property="isdelete" />
+    <result column="shopname" jdbcType="VARCHAR" property="shopname" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="thumbnails" jdbcType="VARCHAR" property="thumbnails" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+  </resultMap>
+</mapper>

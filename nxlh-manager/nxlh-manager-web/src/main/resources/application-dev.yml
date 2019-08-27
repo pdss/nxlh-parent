@@ -1,0 +1,57 @@
+#dubbo conf
+dubbo:
+  application:
+    name: nxlh-manager-web
+  registry:
+    address: zookeeper://127.0.0.1:2181
+  consumer:
+    timeout: 5000
+    retries: 0
+
+#picture upload conf
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 1Mb
+      max-request-size: 1Mb
+  redis:
+    timeout: 10000
+    # redis-single
+    host: 127.0.0.1
+    port: 6379
+
+#tomcat conf
+server:
+  port: 8081
+
+
+nxlh:
+  salt: NXLH
+  dev: true
+  pageSize: 20
+  oss-accesskeyid: LTAIR9AHFHts9Eov
+  oss-accesskeyseret: q6n6e86CLhPrioNNnOssB2tG9G2m5q
+
+  sms-accesskeyid: LTAIR9AHFHts9Eov
+  sms-accesssecret: q6n6e86CLhPrioNNnOssB2tG9G2m5q
+
+  userRedisExprie: 20
+
+  wechat:
+    appId: wxc417dc720f2f0759
+    secret: 4ac1fbd9cce5ab525c14e80ab70c8592
+    token: 111
+    aesKey: 111
+    msgDataFormat: JSON
+
+
+    pay:
+      mchId:
+      mchKey:
+      subAppId:
+      subMchId:
+      keyPath:
+      notifyUrl:
+
+

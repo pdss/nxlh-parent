@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbLotteryWxuserMapper">
+  <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbLotteryWxuser">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
+    <result column="isdelete" jdbcType="INTEGER" property="isdelete" />
+    <result column="lotteryid" jdbcType="VARCHAR" property="lotteryid" />
+    <result column="wxuserid" jdbcType="VARCHAR" property="wxuserid" />
+  </resultMap>
+
+  <!--关联的参与用户的详情-->
+  <resultMap id="LotteryWithJoinUsers" type="com.nxlh.manager.model.dto.LotteryWxUserDTO" extends="BaseResultMap">
+    <association property="joinuser" select="getJoinUsers" column="wxuserid"></association>
+  </resultMap>
+
+  <!--微信用户-->
+  <select id="getJoinUsers" parameterType="String" resultType="com.nxlh.manager.model.dto.WxUserDTO">
+    select * from tb_wxuser where id=#{id}
+  </select>
+
+  <!--获取指定抽奖的参与用户-->
+  <select id="getLotteryWithJoinUsers" resultMap="LotteryWithJoinUsers">
+    select * from tb_lottery_wxuser where lotteryid=#{id}
+  </select>
+
+
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbUserNotificationMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbUserNotification">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="userid" jdbcType="VARCHAR" property="userid"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="nid" jdbcType="VARCHAR" property="nid"/>
+        <result column="ntype" jdbcType="INTEGER" property="ntype"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="subtitle" jdbcType="VARCHAR" property="subtitle"/>
+        <result column="extra" jdbcType="VARCHAR" property="extra"/>
+        <result column="ntype2" jdbcType="INTEGER" property="ntype2"/>
+
+    </resultMap>
+
+
+    <insert id="insertByNotificationId">
+        insert into tb_user_notification(id, addtime, isdelete, userid, `status`, nid, ntype)
+        select UUID() as 'id',
+               now()  as 'addtime',
+               0      as 'isdelete',
+               u.id   as 'userid',
+               0      as 'status',
+               #{nid} as  nid,
+               '0'    as  ntype
+        from (select id from tb_wxuser) u
+    </insert>
+
+
+    <insert id="insertBySystem">
+        insert into tb_user_notification(id, addtime, isdelete, userid, `status`, nid, ntype,title,subtitle,extra,ntype2)
+        VALUES(UUID(),now(),0,#{userid},0,"",0,#{title},#{subtitle},#{extra},#{ntype2})
+    </insert>
+</mapper>

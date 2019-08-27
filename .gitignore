@@ -1,0 +1,4 @@
+# Project exclude paths
+/nxlh-common/target/
+/nxlh-manager/nxlh-manager-dao/target/
+/nxlh-manager/nxlh-manager-model/target/

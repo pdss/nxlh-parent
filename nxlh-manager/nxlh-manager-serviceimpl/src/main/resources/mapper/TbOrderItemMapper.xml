@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbOrderItemMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbOrderItem">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="orderid" jdbcType="VARCHAR" property="orderid"/>
+        <result column="orderno" jdbcType="VARCHAR" property="orderno"/>
+        <result column="productid" jdbcType="VARCHAR" property="productid"/>
+        <result column="buycount" jdbcType="INTEGER" property="buycount"/>
+        <result column="productprice" jdbcType="DECIMAL" property="productprice"/>
+        <result column="productname" jdbcType="VARCHAR" property="productname"/>
+        <result column="tracknumber" jdbcType="VARCHAR" property="tracknumber"/>
+        <result column="express" jdbcType="INTEGER" property="express"/>
+        <result column="deliverytime" jdbcType="TIMESTAMP" property="deliverytime"/>
+        <result column="confirmtime" jdbcType="TIMESTAMP" property="confirmtime"/>
+        <result column="confirmtype" jdbcType="INTEGER" property="confirmtype"/>
+        <result column="istransited" jdbcType="INTEGER" property="istransited"/>
+        <result column="productimage" jdbcType="VARCHAR" property="productimage"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="thirdorderno" jdbcType="VARCHAR" property="thirdorderno"/>
+        <result column="wxuserid" jdbcType="VARCHAR" property="wxuserid"/>
+        <result column="sumprice" jdbcType="DECIMAL" property="sumprice"/>
+        <result column="exchangescore" jdbcType="DECIMAL" property="exchangescore"/>
+        <result column="closetime" jdbcType="TIMESTAMP" property="closetime"/>
+        <result column="rentcost" jdbcType="DECIMAL" property="rentcost"/>
+        <result column="rentprice" jdbcType="DECIMAL" property="rentprice"/>
+        <result column="rentcost" jdbcType="DECIMAL" property="rentcost"/>
+        <result column="producttype" jdbcType="INTEGER" property="producttype"/>
+    </resultMap>
+
+    <!--订单项关联商品-->
+    <resultMap id="OrderItemDetailsMap" type="com.nxlh.manager.model.dbo.TbOrderItem" extends="BaseResultMap">
+        <association property="product" javaType="com.nxlh.manager.model.dbo.TbShop" select="getShopById"
+                     column="productid"/>
+    </resultMap>
+
+    <!--根据id获取商品信息-->
+    <select id="getShopById" resultType="com.nxlh.manager.model.dbo.TbShop">
+        select *
+        from tb_shop
+        where id = #{id}
+    </select>
+
+    <!--订单项详情-->
+    <select id="getOrderItemDetail" resultMap="OrderItemDetailsMap">
+        select *
+        from tb_order_item
+        where id = #{id}
+    </select>
+
+</mapper>

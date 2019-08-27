@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbAuthorizeMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbAuthorize">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="authorizename" jdbcType="VARCHAR" property="authorizename"/>
+        <result column="path" jdbcType="VARCHAR" property="path"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="groupname" jdbcType="VARCHAR" property="groupname"/>
+
+    </resultMap>
+
+    <select id="getAuthorizeByRole" parameterType="String" resultType="com.nxlh.manager.model.dto.AuthorizeDTO">
+        SELECT `tb_authorize`.*,
+               (SELECT count(*)
+                FROM `tb_role_authorize`
+                WHERE `tb_authorize`.id = `tb_role_authorize`.authorizeid
+                  AND `tb_role_authorize`.roleid = #{roleid}
+                  AND `tb_role_authorize`.isdelete = 0) as ischeck
+        FROM `tb_authorize`
+        WHERE `tb_authorize`.isdelete = 0
+    </select>
+
+
+</mapper>

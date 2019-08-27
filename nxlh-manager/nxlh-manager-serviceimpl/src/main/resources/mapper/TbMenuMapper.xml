@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbMenuMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbMenu">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="menuname" jdbcType="VARCHAR" property="menuname"/>
+        <result column="menuurl" jdbcType="VARCHAR" property="menuurl"/>
+        <result column="menuicon" jdbcType="VARCHAR" property="menuicon"/>
+        <result column="parentid" jdbcType="VARCHAR" property="parentid"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+    </resultMap>
+
+
+    <resultMap id="getMenuParen" type="com.nxlh.manager.model.dbo.TbMenu" extends="BaseResultMap">
+        <collection property="parent" ofType="com.nxlh.manager.model.dbo.TbMenu"
+                    select="getMenuParenName" column="parentid">
+        </collection>
+    </resultMap>
+
+    <resultMap id="getMenuChildren" type="com.nxlh.manager.model.dto.MenuDTO" extends="BaseResultMap">
+        <collection property="children" ofType="com.nxlh.manager.model.dto.MenuDTO" select="queryParenidByid"
+                    column="id">
+        </collection>
+    </resultMap>
+
+    <select id="queryParenidByid" resultType="com.nxlh.manager.model.dto.MenuDTO">
+
+        SELECT tb_menu.id,
+               tb_menu.addtime,
+               tb_menu.isdelete,
+               tb_menu.menuname,
+               tb_menu.menuicon,
+               tb_menu.menuurl,
+               tb_menu.parentid,
+               tb_menu.sort
+        from tb_menu
+        where tb_menu.isdelete = 0
+          and tb_menu.parentid = #{id}
+    </select>
+
+    <select id="getMenuByRole" resultType="com.nxlh.manager.model.dto.MenuDTO">
+        select `tb_menu`.id,
+               `tb_menu`.addtime,
+               `tb_menu`.isdelete,
+               `tb_menu`.menuname,
+               `tb_menu`.menuurl,
+               `tb_menu`.menuicon,
+               `tb_menu`.parentid,
+               `tb_menu`.sort,
+               `tb_menu`.menuicon
+        from tb_role_menu,
+             tb_menu
+        where tb_menu.isdelete = 0
+          and tb_role_menu.menuid = tb_menu.id
+          and tb_role_menu.roleid = #{id}
+          and tb_role_menu.isdelete = 0
+        order by `tb_menu`.sort
+    </select>
+
+    <select id="getMenuParenName" resultType="com.nxlh.manager.model.dbo.TbMenu">
+        SELECT tb_menu.id,
+               tb_menu.addtime,
+               tb_menu.isdelete,
+               tb_menu.menuname,
+               tb_menu.menuicon,
+               tb_menu.menuurl,
+               tb_menu.parentid,
+               tb_menu.sort
+        from tb_menu
+        where tb_menu.isdelete = 0
+          and tb_menu.id = #{parentid}
+    </select>
+
+    <select id="queryAll" resultMap="getMenuParen">
+        SELECT tb_menu.id,
+               tb_menu.addtime,
+               tb_menu.isdelete,
+               tb_menu.menuname,
+               tb_menu.menuicon,
+               tb_menu.menuurl,
+               tb_menu.parentid,
+               tb_menu.sort
+        FROM tb_menu
+        WHERE tb_menu.isdelete = 0
+        ORDER BY sort
+    </select>
+
+
+    <select id="queryParentBySon" resultType="com.nxlh.manager.model.dto.MenuDTO"
+            parameterType="com.nxlh.manager.model.dto.MenuDTO">
+        SELECT * FROM `tb_menu` WHERE id IN(
+        <foreach collection="list" item="menu" separator=",">
+            #{menu}
+        </foreach>
+        ) AND isdelete=0
+    </select>
+
+
+</mapper>

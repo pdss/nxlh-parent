@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbCategoryMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbCategory">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="categoryname" jdbcType="VARCHAR" property="categoryname"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="istop" jdbcType="INTEGER" property="istop"/>
+        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="parentid" jdbcType="VARCHAR" property="parentid"/>
+    </resultMap>
+    <select id="queryAllOrderByIsTop" resultMap="BaseResultMap">
+        SELECT id,addtime,isdelete,categoryname,sort,istop,logo
+        FROM `tb_category`
+        ORDER BY istop,sort
+    </select>
+    <update id="updateTop">
+        UPDATE `tb_category`
+        SET istop = 3
+        WHERE istop != 1
+    </update>
+    <update id="updateTopById" parameterType="String">
+        UPDATE `tb_category`
+        SET istop = 2
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="queryAllAndParent" parameterType="com.nxlh.manager.model.dto.CategoryDTO"
+            resultType="com.nxlh.manager.model.dto.CategoryDTO">
+        SELECT a.*,b.categoryname as parentname
+        FROM `tb_category` a
+                 left join `tb_category` b on a.parentid = b.id
+        WHERE a.isdelete = 0
+        ORDER BY a.istop,a.sort
+    </select>
+
+
+    <select id="querySonByParent" resultType="com.nxlh.manager.model.dto.CategoryDTO"
+            parameterType="com.nxlh.manager.model.dto.CategoryDTO">
+        SELECT * FROM `tb_category` WHERE parentid IN(
+        <foreach collection="list" item="category" separator=",">
+            #{category}
+        </foreach>
+        ) AND isdelete=0 ORDER BY istop,sort
+    </select>
+
+    <update id="delByPrimaryKey" parameterType="java.util.List">
+        update `tb_category` SET isdelete = 1
+        where id in (
+        <foreach collection="list" item="category" separator=",">
+            #{category}
+        </foreach>
+        ) AND isdelete=0
+    </update>
+
+    <select id="queryAllCategory" parameterType="String" resultType="com.nxlh.manager.model.dto.CategoryDTO">
+        SELECT `tb_category`.*,
+               (SELECT count(*)
+                FROM `tb_game_category`
+                WHERE `tb_category`.id = `tb_game_category`.categoryid
+                  AND `tb_game_category`.shopid = #{shopid}
+                  AND `tb_game_category`.isdelete = 0) as ischeck
+        FROM `tb_category`
+        WHERE `tb_category`.isdelete = 0
+        ORDER BY `tb_category`.sort
+    </select>
+</mapper>

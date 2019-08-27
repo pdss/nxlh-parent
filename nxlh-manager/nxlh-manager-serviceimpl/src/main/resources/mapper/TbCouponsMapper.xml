@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbCouponsMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbCoupons">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="gettype" jdbcType="INTEGER" property="gettype"/>
+        <result column="vaildtype" jdbcType="INTEGER" property="vaildtype"/>
+        <result column="vailddate" jdbcType="TIMESTAMP" property="vailddate"/>
+        <result column="vailddays" jdbcType="INTEGER" property="vailddays"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="limitmoney" jdbcType="DECIMAL" property="limitmoney"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="shopscope" jdbcType="VARCHAR" property="shopscope"/>
+        <result column="getcondition" jdbcType="INTEGER" property="getcondition"/>
+        <result column="overdate" jdbcType="TIMESTAMP" property="overdate"/>
+        <result column="count" jdbcType="INTEGER" property="count"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+
+    </resultMap>
+
+    <resultMap id="WithShopInfo" type="com.nxlh.manager.model.dto.CouponsDTO" extends="BaseResultMap">
+        <result column="usertype" jdbcType="INTEGER" property="usertype"/>
+        <!--<result column="shopname" jdbcType="VARCHAR" property="shopname"/>-->
+        <association property="shopinfo" javaType="com.nxlh.manager.model.dto.ShopDTO">
+            <!--<id column="id" property="id"/>-->
+            <result column="shopname" property="shopname"/>
+        </association>
+    </resultMap>
+
+    <select id="queryAll" resultMap="WithShopInfo">
+        SELECT tb_coupons.id,
+               tb_coupons.addtime,
+               tb_coupons.isdelete,
+               tb_coupons.gettype,
+               tb_coupons.vaildtype,
+               tb_coupons.vailddate,
+               tb_coupons.vailddays,
+               tb_coupons.type,
+               tb_coupons.limitmoney,
+               tb_coupons.price,
+               tb_coupons.shopscope,
+               tb_coupons.getcondition,
+               tb_coupons.overdate,
+               tb_coupons.count,
+               tb_coupons.title,
+               tb_coupons.usertype,
+               tb_shop.shopname
+
+        FROM tb_coupons
+                 LEFT JOIN tb_shop
+                           ON (tb_coupons.shopscope = tb_shop.id)
+        WHERE tb_coupons.isdelete = 0
+
+    </select>
+</mapper>

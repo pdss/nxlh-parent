@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbWebOrderMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbWebOrder">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="orderno" jdbcType="VARCHAR" property="orderno"/>
+        <result column="orderid" jdbcType="BIGINT" property="orderid"/>
+        <result column="orderitemid" jdbcType="BIGINT" property="orderitemid"/>
+        <result column="orderprice" jdbcType="DECIMAL" property="orderprice"/>
+        <result column="orderpayprice" jdbcType="DECIMAL" property="orderpayprice"/>
+        <result column="itempayprice" jdbcType="DECIMAL" property="itempayprice"/>
+        <result column="ordertype" jdbcType="INTEGER" property="ordertype"/>
+        <result column="ordertype2" jdbcType="INTEGER" property="ordertype2"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="producttype" jdbcType="INTEGER" property="producttype"/>
+        <result column="unionid" jdbcType="VARCHAR" property="unionid"/>
+    </resultMap>
+
+    <resultMap id="queryWxUser" type="com.nxlh.manager.model.dto.WebOrderDTO" extends="BaseResultMap">
+        <collection property="wxuser" ofType="com.nxlh.manager.model.dto.WxUserDTO"
+                    select="getWxuerByid" column="unionid">
+        </collection>
+    </resultMap>
+
+
+    <update id="refundByIds" parameterType="java.util.List">
+        UPDATE `tb_web_order` SET status=7 WHERE id IN(
+        <foreach collection="list" item="ids" separator=",">
+            #{ids}
+        </foreach>
+        ) AND isdelete=0
+    </update>
+
+    <!--微信用户信息-->
+    <select id="getWxuerByid" resultType="com.nxlh.manager.model.dto.WxUserDTO">
+        SELECT *
+        from tb_wxuser
+        where tb_wxuser.unionid = #{unionid}
+    </select>
+
+    <select id="getOverOrderByDate" resultMap="queryWxUser">
+        select tb_web_order.*
+        from tb_web_order
+        where tb_web_order.addtime >= #{starttime} AND tb_web_order.status=4 AND tb_web_order.isdelete=false
+    </select>
+
+    <update id="CloseByIds" parameterType="java.util.List">
+        UPDATE `tb_web_order` SET status=4 WHERE orderitemid IN(
+        <foreach collection="list" item="ids" separator=",">
+            #{ids}
+        </foreach>
+        ) AND isdelete=0 AND status!=7
+    </update>
+
+    <select id="getOverOrderByIds" resultMap="queryWxUser">
+        select tb_web_order.*
+        from tb_web_orders
+        where tb_web_order.isdelete=false
+        AND tb_web_order.ordertype=1
+        AND tb_web_order.ordertype2!=1
+        AND tb_web_order.orderitemid in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+
+    </select>
+
+</mapper>

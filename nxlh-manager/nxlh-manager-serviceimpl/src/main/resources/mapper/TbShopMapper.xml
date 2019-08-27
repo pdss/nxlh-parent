@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbShopMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbShop">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="shopname" jdbcType="VARCHAR" property="shopname"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="discount" jdbcType="REAL" property="discount"/>
+        <result column="stockcount" jdbcType="INTEGER" property="stockcount"/>
+        <result column="saleprice" jdbcType="DECIMAL" property="saleprice"/>
+        <result column="isrent" jdbcType="INTEGER" property="isrent"/>
+        <result column="limitbuy" jdbcType="INTEGER" property="limitbuy"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="istop" jdbcType="INTEGER" property="istop"/>
+        <result column="ishot" jdbcType="INTEGER" property="ishot"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="isprebuy" jdbcType="INTEGER" property="isprebuy"/>
+        <result column="prebuyprice" jdbcType="DECIMAL" property="prebuyprice"/>
+        <result column="images" jdbcType="VARCHAR" property="images"/>
+        <result column="thumbnails" jdbcType="VARCHAR" property="thumbnails"/>
+        <result column="isscore" jdbcType="INTEGER" property="isscore"/>
+        <result column="dailyrent" jdbcType="DECIMAL" property="dailyrent"/>
+        <result column="monthlyrent" jdbcType="DECIMAL" property="monthlyrent"/>
+        <!--<result column="score" jdbcType="INTEGER" property="score"/>-->
+        <result column="isnew" jdbcType="INTEGER" property="isnew"/>
+        <result column="issale" jdbcType="INTEGER" property="issale"/>
+        <result column="cancoupon" jdbcType="INTEGER" property="cancoupon"/>
+        <result column="shortname" jdbcType="VARCHAR" property="shortname"/>
+        <result column="genres" jdbcType="INTEGER" property="genres"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="selltime" jdbcType="VARCHAR" property="selltime"/>
+    </resultMap>
+
+    <resultMap id="VipShopMap" type="com.nxlh.manager.model.dto.ShopDTO" extends="BaseResultMap">
+        <association property="vipShop" select="getVipShopById" column="{shopid=shopid,activityid=activityid}"
+                     javaType="com.nxlh.manager.model.dto.VipShopDTO"></association>
+    </resultMap>
+
+    <resultMap id="getTagAndCategory" type="com.nxlh.manager.model.dbo.TbShop" extends="BaseResultMap">
+        <collection property="categoryList" ofType="com.nxlh.manager.model.dbo.TbCategory"
+                    select="getCategoryListById" column="id">
+        </collection>
+        <collection property="tagList" ofType="com.nxlh.manager.model.dbo.TbTag"
+                    select="getTagListById" column="id">
+        </collection>
+    </resultMap>
+
+    <!--获取会员特价商品子表详情-->
+    <select id="getVipShopById" resultType="com.nxlh.manager.model.dto.VipShopDTO" parameterType="java.util.Map">
+        select * from tb_vip_shop where shopid=#{shopid} and activityid=#{activityid} and isdelete=0
+    </select>
+
+    <!--根据商品ID获取商品标签-->
+    <select id="getTagListById" resultType="com.nxlh.manager.model.dbo.TbTag">
+        select `tb_tag`.id,`tb_tag`.addtime,`tb_tag`.isdelete,`tb_tag`.tagname,`tb_tag`.istop,`tb_tag`.logo
+        from tb_game_tag,
+             tb_tag
+        where tb_tag.isdelete = 0
+          and tb_game_tag.tagid = tb_tag.id
+          and tb_game_tag.shopid = #{id}
+    </select>
+    <!--根据商品ID获取分类-->
+    <select id="getCategoryListById" resultType="com.nxlh.manager.model.dbo.TbCategory">
+        select `tb_category`.id,
+               `tb_category`.addtime,
+               `tb_category`.isdelete,
+               `tb_category`.categoryname,
+               `tb_category`.sort,
+               `tb_category`.istop,
+               `tb_category`.logo
+        from tb_game_category,
+             tb_category
+        where tb_category.isdelete = 0
+          and tb_game_category.categoryid = tb_category.id
+          and tb_game_category.shopid = #{id}
+    </select>
+
+    <!--获取指定商品的信息，包括所属分类和标签-->
+    <select id="queryByid" resultMap="getTagAndCategory">
+        select *
+        from `tb_shop`
+        where isdelete = 0
+          and tb_shop.id = #{id}
+    </select>
+
+    <!--根据分类的ID获取商品列表-->
+    <select id="listByCategory" parameterType="String" resultType="com.nxlh.manager.model.dbo.TbShop">
+        select s.* from tb_shop s
+        inner join
+        tb_game_category g_c on s.id=g_c.shopid where s.isdelete=0 and s.status=1
+        <if test="cid!='00000000000000000000000000000000'">
+            and g_c.categoryid=#{cid}
+        </if>
+        order by s.sort desc
+    </select>
+
+    <!--获取会员特价商品-->
+    <select id="getVipShopsBySId" resultMap="VipShopMap" parameterType="String">
+
+        select * from tb_shop s
+        inner join tb_vip_shop v on s.id = v.shopid
+        where  v.isdelete=0 and v.activityid=#{id} and v.status=1
+        order by v.sort
+
+    </select>
+
+    <!--根据商品id获取特价商品信息-->
+    <select id="getShopWithVipById" resultMap="VipShopMap">
+
+        select * from tb_shop s
+        inner join tb_vip_shop v on s.id = v.shopid
+        inner join tb_seckill sk on sk.id = v.activityid
+        where s.isdelete =0 and v.status=1 and v.isdelete=0 and s.id=#{shopid} and sk.id=#{sid}
+
+    </select>
+
+</mapper>

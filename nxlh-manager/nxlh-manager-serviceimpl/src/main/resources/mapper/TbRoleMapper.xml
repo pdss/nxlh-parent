@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbRoleMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbRole">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="rolename" jdbcType="VARCHAR" property="rolename"/>
+    </resultMap>
+
+    <resultMap id="getRoleAndMenu" type="com.nxlh.manager.model.dbo.TbRole" extends="BaseResultMap">
+        <collection property="menuList" ofType="com.nxlh.manager.model.dto.MenuDTO"
+                    select="getMenuByRole" column="id">
+        </collection>
+    </resultMap>
+
+    <select id="getMenuByRole" resultType="com.nxlh.manager.model.dto.MenuDTO">
+        select `tb_menu`.id,
+               `tb_menu`.addtime,
+               `tb_menu`.isdelete,
+               `tb_menu`.menuname,
+               `tb_menu`.menuurl,
+               `tb_menu`.menuicon,
+               `tb_menu`.parentid,
+               `tb_menu`.sort,
+               `tb_menu`.menuicon
+        from tb_role_menu,
+             tb_menu
+        where tb_menu.isdelete = 0
+          and tb_role_menu.menuid = tb_menu.id
+          and tb_role_menu.roleid = #{id}
+    </select>
+
+    <select id="queryAllByid" resultMap="getRoleAndMenu">
+        select *
+        from `tb_role`
+        where isdelete = 0
+    </select>
+
+    <select id="queryByid" resultMap="getRoleAndMenu">
+        select *
+        from `tb_role`
+        where isdelete = 0
+          and tb_role.id = #{id}
+    </select>
+
+
+</mapper>

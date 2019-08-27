@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbLotteryItemMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbLotteryItem">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="lotteryid" jdbcType="VARCHAR" property="lotteryid"/>
+        <result column="count" jdbcType="INTEGER" property="count"/>
+        <result column="percent" jdbcType="DECIMAL" property="percent"/>
+        <result column="productid" jdbcType="VARCHAR" property="productid"/>
+        <result column="productname" jdbcType="VARCHAR" property="productname"/>
+        <result column="productimage" jdbcType="VARCHAR" property="productimage"/>
+    </resultMap>
+
+    <insert id="insetLotteryItemList">
+        INSERT INTO
+        tb_lottery_item(`id`,`addtime`,`isdelete`,`lotteryid`,`count`,`percent`,`productid`,`productname`,`productimage`)
+        VALUES
+        <foreach collection="list" item="lotteryItem" separator=",">
+            (UUID(),now(),0,#{lotteryItem.lotteryid},#{lotteryItem.count},
+            #{lotteryItem.percent},#{lotteryItem.productid},#{lotteryItem.productname},#{lotteryItem.productimage})
+        </foreach>
+    </insert>
+</mapper>

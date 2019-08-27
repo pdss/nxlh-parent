@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbGameCategoryMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbGameCategory">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="shopid" jdbcType="VARCHAR" property="shopid"/>
+        <result column="categoryid" jdbcType="VARCHAR" property="categoryid"/>
+    </resultMap>
+
+    <select id="selectByShopId" resultType="com.nxlh.manager.model.dbo.TbCategory" parameterType="java.lang.String">
+        SELECT `tb_category`.id,`tb_category`.addtime,`tb_category`.isdelete,`tb_category`.categoryname,
+               `tb_category`.sort,`tb_category`.istop,`tb_category`.logo
+        FROM `tb_game_category`,`tb_category`
+        WHERE `tb_game_category`.shopid=#{shopid}
+        AND `tb_game_category`.categoryid=`tb_category`.id
+    </select>
+
+    <insert id="insertCategoryList">
+        INSERT INTO tb_game_category(`id`,`addtime`,`isdelete`,`shopid`,`categoryid`)
+        VALUES
+        <foreach collection="list" item="category" separator=",">
+            (#{category.id}, #{category.addtime}, #{category.isdelete},#{category.shopid},#{category.categoryid},)
+        </foreach>
+    </insert>
+    
+
+    <!--查询分类名下的商品-->
+    <select id="queryShopsByCategoryName" resultType="com.nxlh.manager.model.dto.ShopDTO"  parameterType="String">
+        select s.* from tb_shop s
+        inner join  tb_game_category gc on s.id =gc.shopid
+        inner join tb_category c on gc.categoryid=c.id
+        where s.isdelete=0 and s.status=1 and c.categoryname like #{categoryname}
+    </select>
+</mapper>

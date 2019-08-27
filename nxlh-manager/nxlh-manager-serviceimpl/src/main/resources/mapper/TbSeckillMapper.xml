@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbSeckillMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbSeckill">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="usertype" jdbcType="INTEGER" property="usertype"/>
+        <result column="joinsumprice" jdbcType="INTEGER" property="joinsumprice"/>
+        <result column="joinscore" jdbcType="INTEGER" property="joinscore"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+    </resultMap>
+</mapper>

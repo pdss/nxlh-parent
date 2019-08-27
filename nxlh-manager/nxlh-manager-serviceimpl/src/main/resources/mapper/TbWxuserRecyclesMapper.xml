@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbWxuserRecyclesMapper">
+  <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbWxuserRecycles">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
+    <result column="isdelete" jdbcType="INTEGER" property="isdelete" />
+    <result column="userid" jdbcType="VARCHAR" property="userid" />
+    <result column="productname" jdbcType="VARCHAR" property="productname" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="finalprice" jdbcType="DECIMAL" property="finalprice" />
+    <result column="productimage" jdbcType="VARCHAR" property="productimage" />
+    <result column="producttype" jdbcType="INTEGER" property="producttype" />
+    <result column="damage" jdbcType="VARCHAR" property="damage" />
+    <result column="expressno" jdbcType="VARCHAR" property="expressno" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="payaccount" jdbcType="VARCHAR" property="payaccount" />
+    <result column="paytype" jdbcType="INTEGER" property="paytype" />
+    <result column="productid" jdbcType="VARCHAR" property="productid" />
+    <result column="orderno" jdbcType="VARCHAR" property="orderno" />
+    <result column="express" jdbcType="VARCHAR" property="express" />
+    <result column="expressno" jdbcType="VARCHAR" property="expressno" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="accounttype" jdbcType="INTEGER" property="accounttype"/>
+  </resultMap>
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbModulesProductsMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbModulesProducts">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="moduleid" jdbcType="VARCHAR" property="moduleid"/>
+        <result column="productid" jdbcType="VARCHAR" property="productid"/>
+        <result column="productname" jdbcType="VARCHAR" property="productname"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="nowprice" jdbcType="DECIMAL" property="nowprice"/>
+        <result column="thumbnail" jdbcType="VARCHAR" property="thumbnail"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+    </resultMap>
+
+
+    <resultMap id="ModulesProductsPageModel" type="com.nxlh.manager.model.dto.ModulesProductsDTO"
+               extends="BaseResultMap">
+        <collection property="shop" ofType="com.nxlh.manager.model.dto.ShopDTO"
+                    select="getShopById" column="productid">
+        </collection>
+        <collection property="indexmodules" ofType="com.nxlh.manager.model.dto.IndexmodulesDTO"
+                    select="getindexmodulesById" column="moduleid">
+        </collection>
+    </resultMap>
+
+    <select id="queryPage" resultMap="ModulesProductsPageModel">
+        SELECT *
+        FROM tb_modules_products
+        WHERE tb_modules_products.isdelete!=1 AND tb_modules_products.moduleid=#{moduleid}
+        ORDER BY sort DESC
+    </select>
+
+
+    <select id="getShopById" resultType="com.nxlh.manager.model.dto.ShopDTO">
+        SELECT *
+        from tb_shop
+        where tb_shop.id = #{productid}
+    </select>
+
+    <select id="getindexmodulesById" resultType="com.nxlh.manager.model.dto.IndexmodulesDTO">
+        SELECT *
+        from tb_indexmodules
+        where tb_indexmodules.id = #{moduleid}
+    </select>
+
+</mapper>
+

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbWxuserMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbWxuser">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+        <result column="avatarurl" jdbcType="VARCHAR" property="avatarurl"/>
+        <result column="gender" jdbcType="INTEGER" property="gender"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="province" jdbcType="VARCHAR" property="province"/>
+        <result column="country" jdbcType="VARCHAR" property="country"/>
+        <result column="openid" jdbcType="VARCHAR" property="openid"/>
+        <result column="unionid" jdbcType="VARCHAR" property="unionid"/>
+        <result column="vipid" jdbcType="INTEGER" property="vipid"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="vscore" jdbcType="DECIMAL" property="vscore"/>
+        <result column="exp" jdbcType="BIGINT" property="exp"/>
+        <result column="sessiontoken" jdbcType="VARCHAR" property="sessiontoken"/>
+        <result column="unionid" jdbcType="VARCHAR" property="unionid"/>
+    </resultMap>
+
+
+    <select id="getNoOrderRecordsIn3Months" resultType="com.nxlh.manager.model.dto.WxUserDTO">
+        select tb_wxuser.*
+        from tb_wxuser
+        where tb_wxuser.vipid in (1,4)
+        <if test="ids!=null">
+            and tb_wxuser.id not in
+            <foreach collection="ids" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        and NOT EXISTS(select 1
+        from tb_order
+        where tb_order.wxuserid = tb_wxuser.id
+        AND tb_order.addtime >= #{starttime}
+        AND (tb_order.refund = 0))
+
+    </select>
+
+    <select id="getWxuserByVip" resultType="string">
+        select id
+        from tb_wxuser
+        <if test='vipid != null '>
+            WHERE vipid=#{vipid}
+        </if>
+    </select>
+
+    <update id="degradeVip" parameterType="java.util.List">
+        update tb_wxuser set vipid=vipid-1 where id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="getWxuserByVipList" resultMap="BaseResultMap">
+        select *
+        from tb_wxuser
+        where vipid not in ("0", #{vipid})
+    </select>
+</mapper>

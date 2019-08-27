@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbWxuserRentshopMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbWxuserRentshop">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="wxuserid" jdbcType="VARCHAR" property="wxuserid"/>
+        <result column="productid" jdbcType="VARCHAR" property="productid"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="backtime" jdbcType="TIMESTAMP" property="backtime"/>
+        <result column="orderid" jdbcType="VARCHAR" property="orderid"/>
+        <result column="overdueprice" jdbcType="DECIMAL" property="overdueprice"/>
+        <result column="overduedays" jdbcType="INTEGER" property="overduedays"/>
+        <result column="protype" jdbcType="INTEGER" property="protype"/>
+        <result column="enddate" jdbcType="TIMESTAMP" property="enddate"/>
+    </resultMap>
+
+    <resultMap id="queryAllModel" type="com.nxlh.manager.model.dto.WxUserRentShopDTO" extends="BaseResultMap">
+        <collection property="order" ofType="com.nxlh.manager.model.dto.OrderDTO"
+                    select="getOrderByid" column="orderid">
+        </collection>
+        <collection property="orderItemDTO" ofType="com.nxlh.manager.model.dto.OrderItemDTO"
+                    select="getOrderItemByid" column="orderid">
+        </collection>
+    </resultMap>
+
+
+    <!--订单信息-->
+    <select id="getOrderByid" resultType="com.nxlh.manager.model.dto.OrderDTO">
+        SELECT *
+        from tb_order
+        where tb_order.id = #{orderid}
+    </select>
+
+    <!--子订单信息-->
+    <select id="getOrderItemByid" resultType="com.nxlh.manager.model.dto.OrderItemDTO">
+        SELECT *
+        from tb_order_item
+        where tb_order_item.orderid = #{orderid}
+        limit 1
+    </select>
+
+    <!--用户是否有正在租赁的商品-->
+    <select id="isExistValidRentByWxUserId" resultType="com.nxlh.manager.model.dbo.TbWxuserRentshop">
+       select * from tb_wxuser_rentshop where `status`=1 and wxuserid=#{wxuserid} limit 1
+  </select>
+
+
+    <!--根据订单id获取出租记录-->
+    <select id="getByOrderId" resultType="com.nxlh.manager.model.dto.WxUserRentShopDTO">
+        select * from tb_wxuser_rentshop where orderid=#{orderid}
+    </select>
+
+
+    <!--获取指定时间段内的租赁记录数-->
+    <select id="getRentRecordInDateTime" resultType="Long">
+        select count(id) from tb_wxuser_rentshop where addtime>=#{date} and wxuserid=#{wxuserid}
+        <if test="protype!=0">
+            and protype=#{protype}
+        </if>
+    </select>
+
+    <!--根据日期获取逾期用户记录-->
+    <select id="getRentOverdue" resultMap="queryAllModel">
+        select * from tb_wxuser_rentshop where status=1 and enddate &lt; #{date}
+    </select>
+
+
+    <!--根据日期获取逾期用户记录-->
+    <select id="getEndDateIsNullOrder" resultMap="queryAllModel">
+        select * from tb_wxuser_rentshop where enddate is null
+    </select>
+</mapper>

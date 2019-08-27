@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbShoppingcarMapper">
+  <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbShoppingcar">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
+    <result column="isdelete" jdbcType="INTEGER" property="isdelete" />
+    <result column="wxuserid" jdbcType="VARCHAR" property="wxuserid" />
+    <result column="productid" jdbcType="VARCHAR" property="productid" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+  </resultMap>
+
+  <resultMap id="CarDetails" type="com.nxlh.manager.model.dbo.TbShoppingcar" extends="BaseResultMap">
+       <association property="productInfo" javaType="com.nxlh.manager.model.dbo.TbShop" column="productid" select="getProductById" />
+  </resultMap>
+
+
+  <select id="getProductById" resultType="com.nxlh.manager.model.dbo.TbShop">
+    select * from tb_shop where id=#{id}
+  </select>
+
+
+  <select id="getCarsByUserId" parameterType="String" resultMap="CarDetails">
+    select * from tb_shoppingcar where wxuserid=#{id} order by addtime desc
+  </select>
+
+
+</mapper>

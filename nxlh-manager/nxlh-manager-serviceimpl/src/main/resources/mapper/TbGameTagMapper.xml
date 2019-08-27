@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbGameTagMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbGameTag">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="shopid" jdbcType="VARCHAR" property="shopid"/>
+        <result column="tagid" jdbcType="VARCHAR" property="tagid"/>
+    </resultMap>
+
+    <select id="selectByShopId"  resultType="com.nxlh.manager.model.dbo.TbTag" parameterType="java.lang.String">
+        SELECT `tb_tag`.id,`tb_tag`.addtime,`tb_tag`.isdelete,`tb_tag`.tagname,`tb_tag`.istop,`tb_tag`.logo
+        FROM `tb_game_tag`,`tb_tag`
+        WHERE `tb_game_tag`.shopid=#{shopid}
+        AND `tb_game_tag`.tagid=`tb_tag`.id
+    </select>
+
+
+    <insert id="insertTagList">
+        INSERT INTO tb_game_tag(`id`,`addtime`,`isdelete`,`shopid`,`tagid`)
+        VALUES
+        <foreach collection="list" item="tag" separator=",">
+            (#{tag.id}, #{tag.addtime}, #{tag.isdelete},#{tag.shopid},#{tag.tagid},)
+        </foreach>
+    </insert>
+
+</mapper>

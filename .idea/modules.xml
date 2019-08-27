@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/nxlh-common/common.iml" filepath="$PROJECT_DIR$/nxlh-common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nxlh-manager/nxlh-manager.iml" filepath="$PROJECT_DIR$/nxlh-manager/nxlh-manager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nxlh-manager/nxlh-manager-dao/nxlh-manager-dao.iml" filepath="$PROJECT_DIR$/nxlh-manager/nxlh-manager-dao/nxlh-manager-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nxlh-manager/nxlh-manager-model/nxlh-manager-model.iml" filepath="$PROJECT_DIR$/nxlh-manager/nxlh-manager-model/nxlh-manager-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nxlh-manager/nxlh-manager-quartz/nxlh-manager-quartz.iml" filepath="$PROJECT_DIR$/nxlh-manager/nxlh-manager-quartz/nxlh-manager-quartz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nxlh-manager/nxlh-manager-service/nxlh-manager-service.iml" filepath="$PROJECT_DIR$/nxlh-manager/nxlh-manager-service/nxlh-manager-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nxlh-manager/nxlh-manager-serviceimpl/nxlh-manager-serviceimpl.iml" filepath="$PROJECT_DIR$/nxlh-manager/nxlh-manager-serviceimpl/nxlh-manager-serviceimpl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nxlh-manager/nxlh-manager-web/nxlh-manager-web.iml" filepath="$PROJECT_DIR$/nxlh-manager/nxlh-manager-web/nxlh-manager-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nxlh-minapp/nxlh-minapp.iml" filepath="$PROJECT_DIR$/nxlh-minapp/nxlh-minapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/nxlh-parent.iml" filepath="$PROJECT_DIR$/.idea/nxlh-parent.iml" />
+    </modules>
+  </component>
+</project>

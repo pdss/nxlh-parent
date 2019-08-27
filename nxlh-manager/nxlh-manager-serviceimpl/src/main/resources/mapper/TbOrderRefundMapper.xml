@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nxlh.manager.mapper.TbOrderRefundMapper">
+    <resultMap id="BaseResultMap" type="com.nxlh.manager.model.dbo.TbOrderRefund">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="addtime" jdbcType="TIMESTAMP" property="addtime"/>
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <result column="orderno" jdbcType="VARCHAR" property="orderno"/>
+        <result column="thirdorderno" jdbcType="VARCHAR" property="thirdorderno"/>
+        <result column="refundreason" jdbcType="INTEGER" property="refundreason"/>
+        <result column="refundprice" jdbcType="DECIMAL" property="refundprice"/>
+        <result column="thirdrefundno" jdbcType="VARCHAR" property="thirdrefundno"/>
+        <result column="refundcount" jdbcType="INTEGER" property="refundcount"/>
+        <result column="orderid" jdbcType="VARCHAR" property="orderid"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="refuse" jdbcType="VARCHAR" property="refuse"/>
+        <result column="verifytime" jdbcType="TIMESTAMP" property="verifytime"/>
+        <result column="wxuserid" jdbcType="VARCHAR" property="wxuserid"/>
+        <result column="orderitemid" jdbcType="VARCHAR" property="orderitemid"/>
+        <result column="refundremark" jdbcType="VARCHAR" property="refundremark"/>
+        <result column="refundno" jdbcType="VARCHAR" property="refundno"/>
+        <result column="refundscore" jdbcType="DECIMAL" property="refundscore"/>
+        <result column="rentcost" jdbcType="DECIMAL" property="rentcost"/>
+    </resultMap>
+
+
+    <!--退款订单项的详情-->
+    <resultMap id="OrderItemDetailsMap" type="com.nxlh.manager.model.dto.OrderRefundDTO" extends="BaseResultMap">
+        <association property="orderItem" javaType="com.nxlh.manager.model.dto.OrderItemDTO" select="getOrderItemById"
+                     column="orderitemid"/>
+
+    </resultMap>
+
+
+    <!--根据orderitemid获取订单详情-->
+    <select id="getOrderItemById" resultType="com.nxlh.manager.model.dto.OrderItemDTO">
+        select *
+        from tb_order_item
+        where id = #{id}
+    </select>
+
+    <!--根据订单id获取退款记录-->
+    <select id="getRefundItemsByOId" resultMap="OrderItemDetailsMap">
+        select *
+        from tb_order_refund
+        where isdelete = 0
+          and orderid = #{id}
+    </select>
+</mapper>

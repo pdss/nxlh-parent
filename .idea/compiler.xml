@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="nxlh-manager-web" />
+        <module name="nxlh-manager-serviceimpl" />
+        <module name="nxlh-manager-service" />
+        <module name="common" />
+        <module name="nxlh-minapp" />
+        <module name="nxlh-manager-model" />
+        <module name="nxlh-manager-dao" />
+        <module name="nxlh-manager-quartz" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="common" target="10" />
+      <module name="nxlh-manager" target="10" />
+      <module name="nxlh-manager-dao" target="10" />
+      <module name="nxlh-manager-model" target="10" />
+      <module name="nxlh-manager-quartz" target="10" />
+      <module name="nxlh-manager-search" target="10" />
+      <module name="nxlh-manager-service" target="10" />
+      <module name="nxlh-manager-serviceimpl" target="10" />
+      <module name="nxlh-manager-socket" target="10" />
+      <module name="nxlh-manager-web" target="10" />
+      <module name="nxlh-minapp" target="10" />
+      <module name="nxlh-parent" target="10" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="common" options="-parameters" />
+      <module name="nxlh-manager-dao" options="-parameters" />
+      <module name="nxlh-manager-model" options="-parameters" />
+      <module name="nxlh-manager-quartz" options="-parameters" />
+      <module name="nxlh-manager-service" options="-parameters" />
+      <module name="nxlh-manager-serviceimpl" options="-parameters" />
+      <module name="nxlh-manager-web" options="-parameters" />
+      <module name="nxlh-minapp" options="-parameters" />
+    </option>
+  </component>
+</project>
