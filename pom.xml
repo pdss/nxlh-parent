@@ -38,7 +38,7 @@
         <dubbo.spring.boot.starter.version>0.2.0</dubbo.spring.boot.starter.version>
         <zookeeper.version>3.4.7</zookeeper.version>
         <zk-client.version>0.1</zk-client.version>
-        <quartz.version>2.2.2</quartz.version>
+        <quartz.version>2.3.2</quartz.version>
         <springboot.version>2.0.5.RELEASE</springboot.version>
         <lombok.version>1.18.0</lombok.version>
         <java.version>10</java.version>
